@@ -6,11 +6,12 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use GuzzleHttp\Client as GuzzleClient;
 use Predis\Client as RedisClient;
 
-class AuthMiddleware
+final class AuthMiddleware implements MiddlewareInterface
 {
     /**
      * @throws \Exception
