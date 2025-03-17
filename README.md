@@ -61,4 +61,4 @@ Successfully authenticated user data is cached in Redis for 1 hour (3600 seconds
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE.md)
