@@ -1,0 +1,31 @@
+{
+  "name": "3cplus/auth-middleware",
+  "version": "1.0.0",
+  "description": "3C plus - api auth middleware",
+  "type": "library",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Gabriel Krysa",
+      "email": "gabriel.krysa@grupo-3c.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Dev3CPlus\\Middleware\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=8.0",
+    "psr/container": "^2.0",
+    "psr/http-message": "^2.0",
+    "psr/http-server-middleware": "^1.0",
+    "psr/http-server-handler": "^1.0",
+    "psr/simple-cache": "^3.0",
+    "guzzlehttp/guzzle": "^7.0",
+    "guzzlehttp/psr7": "^2.0",
+    "ramsey/uuid": "^4.0",
+    "illuminate/support": "^10.48",
+    "predis/predis": "^2.3"
+  }
+}
