@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "3C plus - api auth middleware",
   "type": "library",
-  "license": "GPL-3.0-or-later",
+  "license": "MIT",
   "authors": [
     {
       "name": "Gabriel Krysa",
