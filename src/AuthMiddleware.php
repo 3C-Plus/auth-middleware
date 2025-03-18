@@ -13,11 +13,6 @@ use Predis\Client as RedisClient;
 
 class AuthMiddleware implements MiddlewareInterface
 {
-    public function __construct()
-    {
-        $this->loadDotEnv();
-    }
-
     /**
      * @throws \Exception
      */
@@ -37,8 +32,8 @@ class AuthMiddleware implements MiddlewareInterface
 
         $redisClient = new RedisClient([
             'scheme' => 'tcp',
-            'host' => env('REDIS_CACHE_HOST'),
-            'port' => env('REDIS_CACHE_PORT'),
+            'host' => getenv('REDIS_CACHE_HOST'),
+            'port' => getenv('REDIS_CACHE_PORT'),
         ]);
 
         $cachedUserData = $this->searchUserInCache($redisClient, $apiToken);
@@ -82,27 +77,5 @@ class AuthMiddleware implements MiddlewareInterface
     private function getCacheKey(string $apiToken): string
     {
         return 'auth_user:' . md5($apiToken);
-    }
-
-    private function loadDotEnv(): void
-    {
-        $rootDir = $this->findProjectRoot();
-        
-        if (file_exists($rootDir . '/.env')) {
-            if (class_exists('\\Dotenv\\Dotenv')) {
-                $dotenv = \Dotenv\Dotenv::createImmutable($rootDir);
-                $dotenv->load();
-            }
-        }
-    }
-
-    private function findProjectRoot(): string
-    {
-        $dir = dirname(__DIR__, 4);
-        if (basename(dirname($dir, 1)) === 'vendor') {
-            return dirname($dir, 2);
-        }
-        
-        return getcwd();
     }
 }
