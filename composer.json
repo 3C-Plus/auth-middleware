@@ -26,6 +26,7 @@
     "guzzlehttp/psr7": "^2.0",
     "ramsey/uuid": "^4.0",
     "illuminate/support": "^10.48",
-    "predis/predis": "^2.3"
+    "predis/predis": "^2.3",
+    "vlucas/phpdotenv": "^5.6"
   }
 }

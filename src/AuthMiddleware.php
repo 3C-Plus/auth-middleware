@@ -10,18 +10,12 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use GuzzleHttp\Client as GuzzleClient;
 use Predis\Client as RedisClient;
-use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponse;
 
 class AuthMiddleware implements MiddlewareInterface
 {
-    protected ?HttpResponse $response = null;
-
-    /**
-     * Construtor com suporte a injeção de dependências opcional
-     */
-    public function __construct(HttpResponse $response = null)
+    public function __construct()
     {
-        $this->response = $response;
+        $this->loadDotEnv();
     }
 
     /**
@@ -88,5 +82,27 @@ class AuthMiddleware implements MiddlewareInterface
     private function getCacheKey(string $apiToken): string
     {
         return 'auth_user:' . md5($apiToken);
+    }
+
+    private function loadDotEnv(): void
+    {
+        $rootDir = $this->findProjectRoot();
+        
+        if (file_exists($rootDir . '/.env')) {
+            if (class_exists('\\Dotenv\\Dotenv')) {
+                $dotenv = \Dotenv\Dotenv::createImmutable($rootDir);
+                $dotenv->load();
+            }
+        }
+    }
+
+    private function findProjectRoot(): string
+    {
+        $dir = dirname(__DIR__, 4);
+        if (basename(dirname($dir, 1)) === 'vendor') {
+            return dirname($dir, 2);
+        }
+        
+        return getcwd();
     }
 }
