@@ -1,1 +1,23 @@
 .idea
+
+# Dependências
+/vendor/
+/composer.phar
+
+# Cache do Composer
+.phpunit.result.cache
+.php_cs.cache
+.php-cs-fixer.cache
+
+# Arquivos de ambiente
+.env
+.env.backup
+
+# Logs e caches
+/logs/
+*.log
+/cache/
+
+# Arquivos gerados localmente
+/.phpunit.cache/
+/phpunit.xml

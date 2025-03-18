@@ -10,9 +10,20 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use GuzzleHttp\Client as GuzzleClient;
 use Predis\Client as RedisClient;
+use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponse;
 
-final class AuthMiddleware implements MiddlewareInterface
+class AuthMiddleware implements MiddlewareInterface
 {
+    protected ?HttpResponse $response = null;
+
+    /**
+     * Construtor com suporte a injeção de dependências opcional
+     */
+    public function __construct(HttpResponse $response = null)
+    {
+        $this->response = $response;
+    }
+
     /**
      * @throws \Exception
      */
@@ -22,7 +33,7 @@ final class AuthMiddleware implements MiddlewareInterface
             ?? Arr::last(
                 explode(
                     ' ',
-                    Arr::first($request->getHeader('Authorization'))
+                    Arr::first($request->getHeader('Authorization') ?: [''])
                 )
             );
 
@@ -58,14 +69,15 @@ final class AuthMiddleware implements MiddlewareInterface
 
             $data = json_decode($response->getBody()->getContents());
 
-            $redisClient->set($this->getCacheKey($apiToken), $data->data, 3600);
+            $redisClient->set($this->getCacheKey($apiToken), json_encode($data->data), 3600);
+            
+            $request = $request->withAttribute('auth_user', json_encode($data->data));
+            return $handler->handle($request);
         } catch (GuzzleException $e) {
             throw new \Exception($e->getMessage(), 401);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage(), 500);
         }
-
-        return $handler->handle($request);
     }
 
     private function searchUserInCache(RedisClient $redis, string $apiToken): ?string
